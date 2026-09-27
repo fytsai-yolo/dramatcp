@@ -76,6 +76,14 @@ src/
 └── styles/global.css  theme variables, typography, code blocks
 ```
 
+## Content privacy: drafts vs. published (decided 2026-09-28)
+
+- This repo (`dramatcp`) is public and holds only *published* content.
+- Drafts, voice transcripts, and review notes will live in a separate **private** repo (proposed name `dramatcp-drafts`, to be created in Phase 1 of the writing-workflow project). The Obsidian vault points at that repo, not this one.
+- Publishing = copy the finished file from the drafts repo into `src/content/blog/` here, flip `draft: false`, commit, push to `main`. That copy step is the one manual publish action.
+- Chosen over a gitignored folder inside this repo because a separate repo makes leakage structurally impossible (drafts are never in this repo's working tree at all) rather than relying on `.gitignore` rules never being wrong or bypassed.
+- Rejected: making this repo private outright — GitHub Free doesn't support Pages on private repos (needs Pro), and it would also hide the published site's source, which has some value as a public portfolio piece.
+
 ## Notes
 
 - Site name, bio, about text, and contact email live in [`src/consts.ts`](src/consts.ts) — edit there, not per-page.
