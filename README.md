@@ -1,63 +1,83 @@
-# Astro Starter Kit: Blog
+# Dramatcp
+
+Personal site. Astro blog template, dark theme, no comments/likes/views/analytics by design.
+
+Live at: https://fytsai-yolo.github.io/dramatcp/
+
+## Publishing a new article
+
+This is the whole workflow:
+
+1. Add a Markdown file under `src/content/blog/`, e.g. `src/content/blog/my-post.md`:
+
+   ```yaml
+   ---
+   title: '文章標題'
+   description: '一句話描述，用於列表頁、RSS、搜尋結果'
+   pubDate: 2026-09-27
+   tags: ['breaking', '工程']
+   ---
+   Article body in Markdown goes here.
+   ```
+
+   Frontmatter fields:
+   - `title`, `description`, `pubDate` — required
+   - `tags` — array of strings, optional (defaults to empty)
+   - `updatedDate` — optional, date
+   - `heroImage` — optional, relative path to an image under `src/assets/`
+
+2. Commit and push to `main`:
+
+   ```sh
+   git add src/content/blog/my-post.md
+   git commit -m "Add: my-post"
+   git push
+   ```
+
+3. GitHub Actions builds and deploys automatically (`.github/workflows/deploy.yml`). Check progress with:
+
+   ```sh
+   gh run watch
+   ```
+
+   Live in ~30–60 seconds after the push.
+
+## Local preview
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run astro -- dev --background
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Opens at `http://localhost:4321/dramatcp/` — note the `/dramatcp` path prefix; it matches the deployed GitHub Pages project-site path (see `base` in `astro.config.mjs`). Manage the background server with:
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```sh
+npm run astro -- dev status
+npm run astro -- dev logs
+npm run astro -- dev stop
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+To check a production build before pushing:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+npm run build
+npm run preview
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## Structure
 
-Any static assets, like images, can be placed in the `public/` directory.
+```
+src/
+├── consts.ts          site name, bio/description, contact email
+├── content/blog/      articles (Markdown/MDX)
+├── pages/             routes: /, /blog, /about, /rss.xml
+├── layouts/            BlogPost.astro — shared article layout
+├── components/        Header, Footer, BaseHead (meta/OG/fonts), etc.
+└── styles/global.css  theme variables, typography, code blocks
+```
 
-## 🧞 Commands
+## Notes
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+- Site name, bio, about text, and contact email live in [`src/consts.ts`](src/consts.ts) — edit there, not per-page.
+- Deploying elsewhere later (custom domain, Cloudflare Pages, etc.) means revisiting `site` and `base` in `astro.config.mjs`; a custom domain at the root removes the need for `base` entirely.
+- Not implemented on purpose: comments, likes/view counts, analytics, search, multi-language, newsletter. See project notes for the v2 list (performance log, English posts, project pages, custom domain).
